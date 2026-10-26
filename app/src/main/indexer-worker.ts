@@ -8,6 +8,7 @@ import { createHermesProvider } from '../../../packages/core/src/providers/herme
 import { createZcodeProvider } from '../../../packages/core/src/providers/zcode.ts';
 import { createKiroProvider } from '../../../packages/core/src/providers/kiro.ts';
 import { createOpencodeProvider } from '../../../packages/core/src/providers/opencode.ts';
+import { createCursorProvider } from '../../../packages/core/src/providers/cursor.ts';
 import type { RawLookup } from '../../../packages/core/src/providers/types.ts';
 
 if (!parentPort) throw new Error('indexer-worker must run as a worker thread');
@@ -29,6 +30,13 @@ const opencodeProvider = createOpencodeProvider({
     timeout: 500,
   }),
 });
+const cursorProvider = createCursorProvider({
+  openDatabase: sourcePath => new Database(sourcePath, {
+    readonly: true,
+    fileMustExist: true,
+    timeout: 500,
+  }),
+});
 
 port.on('message', ({ id, operation, args }: { id: number; operation?: string; args?: Record<string, unknown> }) => {
   try {
@@ -38,6 +46,8 @@ port.on('message', ({ id, operation, args }: { id: number; operation?: string; a
         ? zcodeProvider.raw(args as unknown as RawLookup)?.messageText ?? null
         : operation === 'readOpencodeMessageText'
           ? opencodeProvider.raw(args as unknown as RawLookup)?.messageText ?? null
+          : operation === 'readCursorMessageText'
+            ? cursorProvider.raw(args as unknown as RawLookup)?.messageText ?? null
           : operation === 'readKiroMessageText'
             ? createKiroProvider({
               rootDir: typeof args?.rootDir === 'string' ? args.rootDir : undefined,

@@ -13,6 +13,7 @@ import type { ProviderRegistry } from './providers/registry.ts';
 import type { SqliteDb, SqliteRow, SqliteStatement } from './sqlite-types.ts';
 import { openHermesStoreWithNodeSqlite } from './providers/hermes-node.ts';
 import { openOpencodeDatabaseWithNodeSqlite } from './providers/opencode-node.ts';
+import { openCursorDatabaseWithNodeSqlite } from './providers/cursor-node.ts';
 
 type DbRow = SqliteRow;
 
@@ -297,6 +298,7 @@ function createQueryApi(
       openCopilotChronicle: openCopilotChronicleWithNodeSqlite,
       openHermesStore: openHermesStoreWithNodeSqlite,
       openOpencodeDatabase: openOpencodeDatabaseWithNodeSqlite,
+      openCursorDatabase: openCursorDatabaseWithNodeSqlite,
     }),
     invokingSessionId = null,
   }: { providerRegistry?: ProviderRegistry; invokingSessionId?: string | null } = {},

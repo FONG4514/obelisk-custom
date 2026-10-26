@@ -9,7 +9,7 @@
 [![version](https://img.shields.io/github/v/tag/tommy0103/obelisk?label=version&style=flat-square)](https://github.com/tommy0103/obelisk/releases)
 [![license](https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=flat-square)](LICENSE)
 
-Past Claude Code, Codex, GitHub Copilot, DeepSeek Harness, Hermes Agent, Kiro, Kimi Code, OMP, OpenCode, Pi, and ZCode sessions -- queryable by your agent, browsable by you.
+Past Claude Code, Codex, GitHub Copilot, Cursor, DeepSeek Harness, Hermes Agent, Kiro, Kimi Code, OMP, OpenCode, Pi, and ZCode sessions -- queryable by your agent, browsable by you.
 
 **English** · [中文](README.zh-CN.md)
 
@@ -165,7 +165,7 @@ where the source tool has the concept:
 | **Sessions** | Title, project, timestamps, git branch, source | all providers |
 | **Messages** | Full text, model, token usage, parent chain | all providers |
 | **Tool calls** | Tool name, input, file paths | all providers |
-| **Subagents** | Agent type, description, full conversation | Claude Code, Codex, DeepSeek Harness, Hermes Agent, Kiro V3, Kimi Code, OpenCode, ZCode |
+| **Subagents** | Agent type, description, full conversation | Claude Code, Codex, Cursor, DeepSeek Harness, Hermes Agent, Kiro V3, Kimi Code, OpenCode, ZCode |
 | **Summaries** | Session summaries emitted by the provider | Kiro V3, Kimi Code, OpenCode |
 | **Workflows** | Workflow script, result, and per-agent transcripts | Claude Code |
 | **Memories** | Conclusions linked to source sessions | registered markdown files |
@@ -183,6 +183,7 @@ non-Claude IDs are provider-prefixed so they cannot collide.
 | Claude Code | `~/.claude/projects` |
 | Codex | `~/.codex/sessions`, `~/.codex/archived_sessions` |
 | GitHub Copilot | VS Code `User` data roots (Chronicle store + workspace transcripts) |
+| Cursor | `~/.config/Cursor/User/globalStorage/state.vscdb` on Linux, `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` on macOS, `%APPDATA%/Cursor/User/globalStorage/state.vscdb` on Windows |
 | DeepSeek Harness | `~/.dsh/sessions` (or `$DSH_HOME/sessions`) |
 | Hermes Agent | `~/.hermes/state.db` (or `$HERMES_HOME/state.db`) |
 | Kiro | `~/.kiro/sessions` and the platform `kiro-cli/data.sqlite3` store |
@@ -204,11 +205,13 @@ rows that normal queries omit; supported query helpers can opt in with
 | Kimi Code | Undo/clear can attest supersession; preservation is a follow-up |
 | Hermes Agent | Superseded history is not split: compaction-archived and rewound rows are both stored as `inactive` |
 | OpenCode | Session revert state attests inactive history |
+| Cursor | The source does not attest rewind or current-leaf state |
 | Claude Code | The source does not attest rewind or current-leaf state |
 | Codex | Sessions have no branching semantics |
 
 Non-default locations — a Pi `--session-dir`, an OMP custom root, an OpenCode
-data root (an explicit configured root overrides `$OPENCODE_DB`), the VS Code
+data root (an explicit configured root overrides `$OPENCODE_DB`), a Cursor
+config directory or `state.vscdb` file, the VS Code
 Insiders `User` directory — can be selected in the app's **Settings**.
 
 Adapter internals (identity hashing, supersession replay, per-provider root

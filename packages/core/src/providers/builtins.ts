@@ -4,6 +4,7 @@
 import { createClaudeProvider } from './claude.ts';
 import { createCodexProvider } from './codex.ts';
 import { createCopilotProvider, type CopilotChronicleOpener } from './copilot.ts';
+import { createCursorProvider, type CursorDatabaseOpener } from './cursor.ts';
 import { createDeepseekProvider } from './deepseek.ts';
 import { createHermesProvider, type HermesStoreOpener } from './hermes.ts';
 import { createKimiProvider } from './kimi.ts';
@@ -27,6 +28,7 @@ export function createBuiltinProviderRegistry(
     openZcodeDatabase,
     openKiroDatabase,
     openOpencodeDatabase,
+    openCursorDatabase,
   }: {
     homeDir?: string;
     cwd?: string;
@@ -36,12 +38,14 @@ export function createBuiltinProviderRegistry(
     openZcodeDatabase?: ZcodeDatabaseOpener;
     openKiroDatabase?: KiroDatabaseOpener;
     openOpencodeDatabase?: OpencodeDatabaseOpener;
+    openCursorDatabase?: CursorDatabaseOpener;
   } = {},
 ): ProviderRegistry {
   return createProviderRegistry([
     createClaudeProvider({ rootDir: roots['claude'] }),
     createCodexProvider({ rootDir: roots['codex'] }),
     createCopilotProvider({ rootDir: roots['copilot'], userDataRoots: copilotUserDataRoots, openChronicle: openCopilotChronicle }),
+    createCursorProvider({ rootDir: roots['cursor'], homeDir, openDatabase: openCursorDatabase }),
     createDeepseekProvider({ rootDir: roots['deepseek'] }),
     createHermesProvider({ rootDir: roots['hermes'], openStore: openHermesStore }),
     createKimiProvider({ rootDir: roots['kimi'] }),

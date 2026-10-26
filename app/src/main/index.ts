@@ -116,6 +116,11 @@ function getRuntimePaths(persisted = loadPersistedSettings()) {
       fileMustExist: true,
       timeout: 500,
     }),
+    openCursorDatabase: sourcePath => new Database(sourcePath, {
+      readonly: true,
+      fileMustExist: true,
+      timeout: 500,
+    }),
   });
   const providerRoots = runtime.roots;
   const providerRegistry = runtime.registry;
@@ -869,7 +874,7 @@ ipcMain.handle('db:getMessageFullText', async (_, uuid) => {
     workflowAgent,
   };
   // Store-backed source reads belong in the worker: a custom root can live on a slow mount.
-  if (lookup.source === 'zcode' || lookup.source === 'hermes' || lookup.source === 'kiro' || lookup.source === 'opencode') {
+  if (lookup.source === 'zcode' || lookup.source === 'hermes' || lookup.source === 'kiro' || lookup.source === 'opencode' || lookup.source === 'cursor') {
     try {
       const messageText = lookup.source === 'zcode'
         ? await indexerWorker?.readZcodeMessageText(lookup)
@@ -877,7 +882,9 @@ ipcMain.handle('db:getMessageFullText', async (_, uuid) => {
           ? await indexerWorker?.readKiroMessageText({ ...lookup, rootDir: paths.providerRoots.kiro })
           : lookup.source === 'opencode'
             ? await indexerWorker?.readOpencodeMessageText(lookup)
-            : await indexerWorker?.readHermesMessageText(lookup);
+            : lookup.source === 'cursor'
+              ? await indexerWorker?.readCursorMessageText(lookup)
+              : await indexerWorker?.readHermesMessageText(lookup);
       return messageText ?? msg.text ?? null;
     } catch {
       return msg.text ?? null;

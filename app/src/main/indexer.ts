@@ -335,9 +335,12 @@ function buildIndex({
       const openOpencodeDatabase = (sourcePath: string) => new (
         DatabaseImpl as new (path: string, options?: { readonly?: boolean; fileMustExist?: boolean; timeout?: number }) => any
       )(sourcePath, { readonly: true, fileMustExist: true, timeout: 500 });
+      const openCursorDatabase = (sourcePath: string) => new (
+        DatabaseImpl as new (path: string, options?: { readonly?: boolean; fileMustExist?: boolean; timeout?: number }) => any
+      )(sourcePath, { readonly: true, fileMustExist: true, timeout: 500 });
       const registry = providerRegistry
         ?? (providerSettings === undefined
-          ? createBuiltinProviderRegistry(roots, { homeDir: compatibilityHome, openCopilotChronicle, openHermesStore, openZcodeDatabase, openKiroDatabase, openOpencodeDatabase })
+          ? createBuiltinProviderRegistry(roots, { homeDir: compatibilityHome, openCopilotChronicle, openHermesStore, openZcodeDatabase, openKiroDatabase, openOpencodeDatabase, openCursorDatabase })
           : createConfiguredBuiltinProviderRuntime(providerSettings, {
             homeDir: compatibilityHome,
             baseRoots: {
@@ -350,6 +353,7 @@ function buildIndex({
             openZcodeDatabase,
             openKiroDatabase,
             openOpencodeDatabase,
+            openCursorDatabase,
           }).registry);
       const providerPlan = createProviderIndexPlan(db, registry, {
         force,

@@ -33,6 +33,7 @@ import { openCopilotChronicleWithNodeSqlite } from './providers/copilot-node.ts'
 import type { NodeSqliteDb, SqliteDb } from './sqlite-types.ts';
 import { openHermesStoreWithNodeSqlite } from './providers/hermes-node.ts';
 import { openOpencodeDatabaseWithNodeSqlite } from './providers/opencode-node.ts';
+import { openCursorDatabaseWithNodeSqlite } from './providers/cursor-node.ts';
 
 interface SkippedFile {
   provider: string;
@@ -206,6 +207,7 @@ function buildIndex({ force = false, ignoreRecentBuild = false, ignoreDaemonOwne
         openCopilotChronicle: openCopilotChronicleWithNodeSqlite,
         openHermesStore: openHermesStoreWithNodeSqlite,
         openOpencodeDatabase: openOpencodeDatabaseWithNodeSqlite,
+        openCursorDatabase: openCursorDatabaseWithNodeSqlite,
       }).registry;
     }
 

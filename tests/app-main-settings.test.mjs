@@ -11,6 +11,7 @@ import { join } from 'node:path';
 
 import { acquireWriterLease } from '../packages/core/src/writer-lease.ts';
 import { defaultKiroDatabasePath } from '../packages/core/src/providers/kiro.ts';
+import { defaultCursorDatabasePath } from '../packages/core/src/providers/cursor.ts';
 import { defaultCopilotUserDataRoots } from '../packages/core/src/providers/copilot.ts';
 import { makeTempDir } from './temp-dirs.mjs';
 
@@ -351,6 +352,8 @@ test('main process watches every root declared by the built-in provider registry
       { kind: 'file', path: join(insidersCopilotRoot, 'globalStorage', 'github.copilot-chat', 'session-store.db') },
       { kind: 'file', path: join(insidersCopilotRoot, 'globalStorage', 'github.copilot-chat', 'session-store.db-wal') },
       { kind: 'tree', path: join(insidersCopilotRoot, 'workspaceStorage') },
+      { kind: 'file', path: defaultCursorDatabasePath(home) },
+      { kind: 'file', path: `${defaultCursorDatabasePath(home)}-wal` },
       { kind: 'tree', path: join(home, '.dsh', 'sessions') },
       { kind: 'file', path: join(home, '.hermes', 'state.db') },
       { kind: 'file', path: join(home, '.hermes', 'state.db-wal') },
